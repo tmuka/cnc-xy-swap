@@ -9,7 +9,7 @@ Context for a Claude Code session that continues this work. Start with `xy-swap-
 - Goal: X = gantry (+ = right), Y = vertical (+ = up), home stays bottom-left. Both axes home toward negative, so coordinates become X 0..812 and Y 0..1230.
 
 ## Decisions and facts established
-- Firmware change: only `Y_AUTO_SQUARE=1` -> `X_AUTO_SQUARE=1` (builder JSON). The 4-axis build keeps A.
+- Firmware changes: `Y_AUTO_SQUARE=1` -> `X_AUTO_SQUARE=1`, and `N_TOOLS=32` removed (tool table off). The 4-axis build keeps A.
 - In the 4-axis ganged map, the second gantry motor stays on the board's Y2 connector (motor M4), and A stays on M3. Rewiring = swap the X and Y plugs, for both motors and limit switches.
 - M4 (X2) enable is PC7, which is shared with Y. That's why `$37` (steppers kept enabled, see grblHAL stepper.c `st_go_idle`) is set to 3 rather than 2.
 - `$8` (ganged direction invert) applies after `$3` relative to the main motor (Src/driver.c), so it stays 0.
@@ -29,7 +29,8 @@ Context for a Claude Code session that continues this work. Start with `xy-swap-
 ## Status (2026-10-15)
 - Current firmware per `$I`: build 20260622, driver 260410, SuperLongBoard Ext, XYZA, plugins include SIENCI ATCi v0.5.0, FS macro plugin, SDCARD. The builder's <20241208 reset warning doesn't apply.
 - Builder export with the Sienci/Altmill vendor profile duplicated all 61 defaults (profile values appended, 6 conflicting). The user was asked to clear the vendor profile and re-export. Waiting for that file.
-- SD-card macros not yet reviewed (the user was asked to share any with G53 X/Y moves).
+- SD-card macros: the user confirmed none are used.
+- Tool table turned off in the swapped JSON (`N_TOOLS=32` removed) at the user's request, following ncSender's recommendation. No N_TOOLS / tool_table use found in the Sienci keep-out plugin or ncSender.
 - Files prepared. Nothing has been flashed, rewired or tested on the machine yet.
 - Direction model **confirmed by the user (2026-10-15)**: before the swap, +X = up and +Y = left. Fallbacks, in case of a wiring surprise: `$3=5` if the gantry is reversed, `$3=6` if the vertical axis is reversed, `$8=1` if the gantry motors fight.
 - Open items for the user: re-zero work offsets and G28/G30 after homing. Check the probe corner and generator-plugin cut directions in ncSender. Verify the ATC pocket and TLS positions with Z raised (macros 9004, 9002, 9005).

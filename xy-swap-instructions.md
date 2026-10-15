@@ -40,7 +40,7 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
 
 1. Make sure the `$$` output still matches `original/firmware-settings-2026-10-15.txt`. If you changed anything since, redo the conversion.
 2. Send `$#` and save the output. It holds the work offsets (G54-G59), G28/G30 positions, G92 and the tool-length offset. These are **not** in `$$`, are in old coordinates, and need re-setting after the swap.
-3. The current firmware has the **FS macro plugin** and **SD card** loaded. If you keep macros or `.nc`/`.macro` files on the controller's SD card that move to machine (`G53`) X/Y positions, list them. They need converting too. Nothing in this pack covers them.
+3. SD card: the firmware has the FS macro plugin and SD card loaded, but you confirmed you haven't used SD-card macros, so there's nothing to convert.
 4. Have a way to stop the machine within reach (E-stop) for every motion step.
 
 ## 2. Flash the firmware
@@ -48,10 +48,10 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
 1. Load `STM32F4xx_LONGBOARD32_EXT_XY_swapped.json` in the web builder, build and flash.
    - **Machine vendor profile warning:** if the builder has **Machine vendor: Sienci / Altmill MK2** selected, that profile turns on Y auto-square in addition to the file's X auto-square. The builder then reports **"MOTORS: available 5, required 6"**. Fix it by setting **Y-axis** to **Single motor** (X-axis stays **Auto-squared**). If the profile keeps forcing Y back, set Machine vendor to blank/none, pick the driver and board again, and click Load board.
    - On the General tab, check: Number of axes **4**, X-axis **Auto-squared**, Y-axis **Single motor**, Z-axis **Single motor**, and no MOTORS warning.
-   - Before generating, click **Save board** and compare the exported file with `converted/STM32F4xx_LONGBOARD32_EXT_XY_swapped.json`. The only difference from the original should be `X_AUTO_SQUARE=1` replacing `Y_AUTO_SQUARE=1` (plus the changed defaults).
+   - Before generating, click **Save board** and compare the exported file with `converted/STM32F4xx_LONGBOARD32_EXT_XY_swapped.json`. The only differences from the original should be `X_AUTO_SQUARE=1` replacing `Y_AUTO_SQUARE=1`, `N_TOOLS=32` gone (Tool table off), and the changed defaults.
    - Also check that the exported `setting_defaults` list has **61** entries with no duplicates. With the Sienci/Altmill profile selected, the builder adds the profile's old-layout defaults after the file's values (X/Y travel 1260/1248, `$3`=6, `$23`=1, X/Y steps 320/320), and those probably win. They only matter if flashing resets your settings. If the duplicates won't go away, the `$$` check in step 2 below is **mandatory**: paste `full-settings-after-swap.txt` if anything was reset.
    - The builder notes that updating from builds older than 20241208 resets settings. **Checked:** the current firmware is build 20260622 (`$I`: SuperLongBoard Ext, 4 axes XYZA, SIENCI ATCi plugin v0.5.0), so no forced reset is expected. Still do the `$$` comparison in step 2.
-   - The only firmware change is `Y_AUTO_SQUARE=1` -> `X_AUTO_SQUARE=1`. grblHAL turns X ganging on automatically when X auto-square is set.
+   - Firmware changes: `Y_AUTO_SQUARE=1` -> `X_AUTO_SQUARE=1` (grblHAL turns X ganging on automatically when X auto-square is set), and the firmware **tool table is turned off** (`N_TOOLS=32` removed) because ncSender handles tools, as ncSender recommends. No dependency on it was found in the Sienci ATCi plugin or ncSender. Any tool offsets stored in the controller go away. Your ncSender tool library has no X/Y/Z offsets, so nothing is lost there.
    - Checked against the grblHAL source (motor_pins.h): with 4 axes + 1 ganged there are 5 motors, and the ganged axis always takes the highest motor number (M4 = the board's Y2 connector). A stays on M3 (the A connector). This is the same arrangement Y2 uses today.
 2. After flashing, connect and send `$$`. **Compare it with your backup before doing anything else.**
    - Normally the stored settings survive a flash, and only the 11 values below need changing.
