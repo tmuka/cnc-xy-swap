@@ -11,6 +11,7 @@ Start here: [xy-swap-instructions.md](xy-swap-instructions.md). It refers to fil
 | `converted/builder-export-verified.json` | Web builder's own Save-board export, checked to match the intended config. This is the state to generate firmware from. |
 | `original/offsets-2026-10-15.txt` | `$#` work offsets before the change |
 | `converted/work-offsets-after-swap.txt` | G10 commands setting G54-G59 in the new axes, plus `G92.1` |
+| `converted/firmware-xy-swap-20261015.hex` | Firmware built from the verified builder state. This is the file to flash. |
 | `converted/xy-swap-commands.txt` | The 11 `$` settings to send after flashing |
 | `converted/full-settings-after-swap.txt` | All settings with the swap applied. Use only if flashing reset settings to defaults. |
 | `converted/ncsender-backup-tsmcnc5-XY-swapped.ncsbackup` | ncSender backup to restore after the change |

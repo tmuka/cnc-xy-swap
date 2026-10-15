@@ -45,7 +45,7 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
 
 ## 2. Flash the firmware
 
-1. Load `STM32F4xx_LONGBOARD32_EXT_XY_swapped.json` in the web builder, build and flash.
+1. Flash `converted/firmware-xy-swap-20261015.hex` (already built from the verified builder state; file check passed). To rebuild instead, load `STM32F4xx_LONGBOARD32_EXT_XY_swapped.json` in the web builder, build and flash.
    - **Machine vendor profile warning:** if the builder has **Machine vendor: Sienci / Altmill MK2** selected, that profile turns on Y auto-square in addition to the file's X auto-square. The builder then reports **"MOTORS: available 5, required 6"**. Fix it by setting **Y-axis** to **Single motor** (X-axis stays **Auto-squared**). If the profile keeps forcing Y back, set Machine vendor to blank/none, pick the driver and board again, and click Load board.
    - On the General tab, check: Number of axes **4**, X-axis **Auto-squared**, Y-axis **Single motor**, Z-axis **Single motor**, and no MOTORS warning.
    - Before generating, click **Save board** and compare the exported file with `converted/STM32F4xx_LONGBOARD32_EXT_XY_swapped.json`. The only differences from the original should be `X_AUTO_SQUARE=1` replacing `Y_AUTO_SQUARE=1`, `N_TOOLS=32` gone (Tool table off), and the changed defaults.
@@ -54,10 +54,12 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
    - The builder notes that updating from builds older than 20241208 resets settings. **Checked:** the current firmware is build 20260622 (`$I`: SuperLongBoard Ext, 4 axes XYZA, SIENCI ATCi plugin v0.5.0), so no forced reset is expected. Still do the `$$` comparison in step 2.
    - Firmware changes: `Y_AUTO_SQUARE=1` -> `X_AUTO_SQUARE=1` (grblHAL turns X ganging on automatically when X auto-square is set), and the firmware **tool table is turned off** (`N_TOOLS=32` removed) because ncSender handles tools, as ncSender recommends. No dependency on it was found in the Sienci ATCi plugin or ncSender. Any tool offsets stored in the controller go away. Your ncSender tool library has no X/Y/Z offsets, so nothing is lost there.
    - Checked against the grblHAL source (motor_pins.h): with 4 axes + 1 ganged there are 5 motors, and the ganged axis always takes the highest motor number (M4 = the board's Y2 connector). A stays on M3 (the A connector). This is the same arrangement Y2 uses today.
-2. After flashing, connect and send `$$`. **Compare it with your backup before doing anything else.**
+2. After flashing, connect and send **`$PINS`** (no motion). It must list **`X2 step`**, **`X2 dir`** and an **X2 limit** entry (on PE5 / PE10 / PE6), and **no `Y2` entries**. This is the only way to confirm the X ganging in the built firmware. If Y2 appears, stop and flash the old firmware back.
+3. Send `$I`: the build should be 20261015 and the board SuperLongBoard Ext, with the SIENCI ATCi plugin listed.
+4. Send `$$`. **Compare it with your backup before doing anything else.**
    - Normally the stored settings survive a flash, and only the 11 values below need changing.
    - If the settings were reset to builder defaults (for example, Z steps/mm shows 200 instead of 80.13, or rates/accelerations changed), paste all of `converted/full-settings-after-swap.txt`. It is your full backup with the swap already applied, minus the read-only MAC address line. An error on a single line (a setting the new firmware doesn't have) is harmless, but read any error that appears.
-3. Don't home or jog yet. The machine is still wired the old way, and the settings below aren't in yet.
+5. Don't home or jog yet. The machine is still wired the old way, and the settings below aren't in yet.
 
 ## 3. Settings to change
 
