@@ -28,7 +28,7 @@ Context for a Claude Code session that continues this work. Start with `xy-swap-
 
 ## Status (2026-10-15)
 - Current firmware per `$I`: build 20260622, driver 260410, SuperLongBoard Ext, XYZA, plugins include SIENCI ATCi v0.5.0, FS macro plugin, SDCARD. The builder's <20241208 reset warning doesn't apply.
-- Builder export with the Sienci/Altmill vendor profile duplicated all 61 defaults (profile values appended, 6 conflicting). The user was asked to clear the vendor profile and re-export. Waiting for that file.
+- Builder export with the Sienci/Altmill vendor profile duplicated all 61 defaults (profile values appended, 6 conflicting). Clearing the vendor profile fixed the duplicate defaults (export #3: 61 clean defaults), but dropped `ATCI_ENABLE=1` (the Sienci ATCi keep-out plugin, `$683`-`$687`). The user was asked to enable it on the Plugins / 3rd party tab, or else go back to the vendor profile with Y = Single motor and accept the duplicated defaults. Waiting for the next export.
 - SD-card macros: the user confirmed none are used.
 - Tool table turned off in the swapped JSON (`N_TOOLS=32` removed) at the user's request, following ncSender's recommendation. No N_TOOLS / tool_table use found in the Sienci keep-out plugin or ncSender.
 - Files prepared. Nothing has been flashed, rewired or tested on the machine yet.
