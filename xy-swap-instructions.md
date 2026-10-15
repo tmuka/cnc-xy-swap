@@ -39,7 +39,7 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
 ## 1. Before you start
 
 1. Make sure the `$$` output still matches `original/firmware-settings-2026-10-15.txt`. If you changed anything since, redo the conversion.
-2. Send `$#` and save the output. It holds the work offsets (G54-G59), G28/G30 positions, G92 and the tool-length offset. These are **not** in `$$`, are in old coordinates, and need re-setting after the swap.
+2. **Done 2026-10-15:** `original/offsets-2026-10-15.txt`. If you re-zero anything before the swap, send `$#` again and save it. It holds the work offsets (G54-G59), G28/G30 positions, G92 and the tool-length offset. These are **not** in `$$`, are in old coordinates, and need re-setting after the swap.
 3. SD card: the firmware has the FS macro plugin and SD card loaded, but you confirmed you haven't used SD-card macros, so there's nothing to convert.
 4. Have a way to stop the machine within reach (E-stop) for every motion step.
 
@@ -180,7 +180,12 @@ Not changed, check by hand:
 4. Check the firmware keep-out zone: jog slowly toward the rack and confirm it stops at the zone edge (X 700-850, Y 750-1230).
 
 ## 8. Re-establish things stored in the controller
-- Work offsets (G54-G59), G28/G30 positions: re-zero / re-set after homing (compare with the `$#` you saved).
+- Work offsets: after homing works, paste `converted/work-offsets-after-swap.txt`. It sets G54-G59 to the same physical spots in the new axes (from `original/offsets-2026-10-15.txt`) and clears the leftover G92 offset (X 2.49, Y 258) with `G92.1`. Then send `$#` and check:
+  - G54 = 258.000, -2.490, 33.895 ... G59 = 734.496, 269.261, -40.279
+  - G92 = 0, 0, 0
+  - G28 / G30 stay 0,0,0. That's the home corner, which hasn't moved.
+  - `[ATCI:850.00,700.00,1230.00,750.00]`: keep-out X max, X min, Y max, Y min (was 1230, 750, -700, -850)
+- Old jobs: an offset points at the same physical spot as before, but a job set up for the old orientation extends from it in a rotated direction (see section 9). For new work, zero again on the stock.
 - Laser offsets: macros 9006/9007 are converted, but verify the laser crosshair once.
 
 ## 9. Existing jobs and G-code files
