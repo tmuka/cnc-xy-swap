@@ -18,6 +18,14 @@ Context for a Claude Code session that continues this work. Start with `xy-swap-
 - Firmware setting changes: `$100=80.20001 $101=200.40000 $130=812 $131=1230 $3=4 $23=3 $37=3 $684=700 $685=750 $686=850 $687=1230`.
 - ncSender backup converted with `converted/swap_ncs.py` (settings, Rapid Change ATC, Manual Tool Changer, macros 9002/9004/9005/9006/9007/9008/9010/9011/9012).
 
+## Review pass (2026-10-15), verified against upstream source
+- grblHAL core motor_pins.h: 4 axes + 1 ganged = 5 motors, and the ganged axis takes the highest index (M4 = Y2 connector). A = M3. driver_opts.h: X_AUTO_SQUARE implies X_GANGED.
+- driver.c: auto-squaring masks step pulses (not enable), the X2 limit uses the `$5` X bit, and `$8` is relative to the main motor after `$3`.
+- The map's `#ifndef Y_GANGED` around M4_ENABLE: either way, the X2 enable ends up being PC7 = Y enable, so `$37=3` stands.
+- ncSender: `front-left` = xHome min / yHome min. The Rapid Change ATC plugin uses plain G53 X/Y moves, and orientation Y/Negative gives slot n = slot1.y - (n-1)*45.001.
+- The user's `$20=0` and `$21=0` (soft/hard limits off), with only jog limits (`$40=1`) on.
+- Added: a safer order (settings before rewire, no motion until switch tests), the EXT external-driver cable warning, `full-settings-after-swap.txt` in case flashing resets settings, `$#` capture, a warning about old jobs running rotated, and SD-card macro check.
+
 ## Status (2026-10-15)
 - Files prepared. Nothing has been flashed, rewired or tested on the machine yet.
 - The direction assumption (+X up, +Y left before the swap) was derived from the bottom-left home and the "UI rotated 90° clockwise" description. Fallbacks: `$3=5` if the gantry is reversed, `$3=6` if the vertical axis is reversed, `$8=1` if the gantry motors fight.
