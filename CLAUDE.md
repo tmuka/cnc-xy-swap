@@ -28,7 +28,7 @@ Context for a Claude Code session that continues this work. Start with `xy-swap-
 
 ## Status (2026-10-15)
 - Files prepared. Nothing has been flashed, rewired or tested on the machine yet.
-- The direction assumption (+X up, +Y left before the swap) was derived from the bottom-left home and the "UI rotated 90° clockwise" description. Fallbacks: `$3=5` if the gantry is reversed, `$3=6` if the vertical axis is reversed, `$8=1` if the gantry motors fight.
+- Direction model **confirmed by the user (2026-10-15)**: before the swap, +X = up and +Y = left. Fallbacks, in case of a wiring surprise: `$3=5` if the gantry is reversed, `$3=6` if the vertical axis is reversed, `$8=1` if the gantry motors fight.
 - Open items for the user: re-zero work offsets and G28/G30 after homing. Check the probe corner and generator-plugin cut directions in ncSender. Verify the ATC pocket and TLS positions with Z raised (macros 9004, 9002, 9005).
 - When flashing the swapped JSON: its default values for Z/A, homing speeds and pull-off are the builder's, not the user's. If flashing resets the settings, restore them from `original/firmware-settings-2026-10-15.txt` plus the changes above.
 

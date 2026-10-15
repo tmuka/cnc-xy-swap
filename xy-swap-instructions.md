@@ -23,6 +23,8 @@ Files (repo path / original location in `C:\downloads`):
 
 Coordinate conversion used everywhere: **new X = -(old Y), new Y = old X**, Z unchanged.
 
+Confirmed starting point: today +X moves **up** and +Y moves **left**. The direction and homing values below are based on this.
+
 ## Order of work (summary)
 
 1. Record what the machine has now (`$$`, `$#`, SD card files).
@@ -115,7 +117,7 @@ Keep the bit out (or Z fully retracted) and stay at the E-stop.
    - +X -> gantry moves **right**; -X -> left
    - +Y -> spindle moves **up**; -Y -> down
    - Both gantry motors must move together. If one side moves the opposite way or the gantry racks or buzzes, **stop immediately** and set `$8=1`.
-   - If the gantry goes the wrong way: `$3=5`. If the vertical axis goes the wrong way: `$3=6`. Fix the direction before homing, or homing will drive away from the switches.
+   - The directions are confirmed, so a reversal points to a wiring mix-up. Recheck the cables first. As a last resort: gantry the wrong way: `$3=5`. If the vertical axis goes the wrong way: `$3=6`. Fix the direction before homing, or homing will drive away from the switches.
    - A jog that is refused with a travel error before homing is normal (the position isn't known yet). Jog the other way first.
 
 ### 5c. Homing
