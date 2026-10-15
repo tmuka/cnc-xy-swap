@@ -40,7 +40,7 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
 
 1. Make sure the `$$` output still matches `original/firmware-settings-2026-10-15.txt`. If you changed anything since, redo the conversion.
 2. Send `$#` and save the output. It holds the work offsets (G54-G59), G28/G30 positions, G92 and the tool-length offset. These are **not** in `$$`, are in old coordinates, and need re-setting after the swap.
-3. If you keep macros or `.nc`/`.macro` files on the controller's SD card that move to machine (`G53`) X/Y positions, list them. They need converting too. Nothing in this pack covers them.
+3. The current firmware has the **FS macro plugin** and **SD card** loaded. If you keep macros or `.nc`/`.macro` files on the controller's SD card that move to machine (`G53`) X/Y positions, list them. They need converting too. Nothing in this pack covers them.
 4. Have a way to stop the machine within reach (E-stop) for every motion step.
 
 ## 2. Flash the firmware
@@ -50,7 +50,7 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
    - On the General tab, check: Number of axes **4**, X-axis **Auto-squared**, Y-axis **Single motor**, Z-axis **Single motor**, and no MOTORS warning.
    - Before generating, click **Save board** and compare the exported file with `converted/STM32F4xx_LONGBOARD32_EXT_XY_swapped.json`. The only difference from the original should be `X_AUTO_SQUARE=1` replacing `Y_AUTO_SQUARE=1` (plus the changed defaults).
    - Also check that the exported `setting_defaults` list has **61** entries with no duplicates. With the Sienci/Altmill profile selected, the builder adds the profile's old-layout defaults after the file's values (X/Y travel 1260/1248, `$3`=6, `$23`=1, X/Y steps 320/320), and those probably win. They only matter if flashing resets your settings. If the duplicates won't go away, the `$$` check in step 2 below is **mandatory**: paste `full-settings-after-swap.txt` if anything was reset.
-   - The builder notes that updating from builds older than 20241208 resets settings. Check the build date in `$I` first. If it's older, expect a reset and use `full-settings-after-swap.txt`.
+   - The builder notes that updating from builds older than 20241208 resets settings. **Checked:** the current firmware is build 20260622 (`$I`: SuperLongBoard Ext, 4 axes XYZA, SIENCI ATCi plugin v0.5.0), so no forced reset is expected. Still do the `$$` comparison in step 2.
    - The only firmware change is `Y_AUTO_SQUARE=1` -> `X_AUTO_SQUARE=1`. grblHAL turns X ganging on automatically when X auto-square is set.
    - Checked against the grblHAL source (motor_pins.h): with 4 axes + 1 ganged there are 5 motors, and the ganged axis always takes the highest motor number (M4 = the board's Y2 connector). A stays on M3 (the A connector). This is the same arrangement Y2 uses today.
 2. After flashing, connect and send `$$`. **Compare it with your backup before doing anything else.**

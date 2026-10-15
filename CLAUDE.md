@@ -27,6 +27,9 @@ Context for a Claude Code session that continues this work. Start with `xy-swap-
 - Added: a safer order (settings before rewire, no motion until switch tests), the EXT external-driver cable warning, `full-settings-after-swap.txt` in case flashing resets settings, `$#` capture, a warning about old jobs running rotated, and SD-card macro check.
 
 ## Status (2026-10-15)
+- Current firmware per `$I`: build 20260622, driver 260410, SuperLongBoard Ext, XYZA, plugins include SIENCI ATCi v0.5.0, FS macro plugin, SDCARD. The builder's <20241208 reset warning doesn't apply.
+- Builder export with the Sienci/Altmill vendor profile duplicated all 61 defaults (profile values appended, 6 conflicting). The user was asked to clear the vendor profile and re-export. Waiting for that file.
+- SD-card macros not yet reviewed (the user was asked to share any with G53 X/Y moves).
 - Files prepared. Nothing has been flashed, rewired or tested on the machine yet.
 - Direction model **confirmed by the user (2026-10-15)**: before the swap, +X = up and +Y = left. Fallbacks, in case of a wiring surprise: `$3=5` if the gantry is reversed, `$3=6` if the vertical axis is reversed, `$8=1` if the gantry motors fight.
 - Open items for the user: re-zero work offsets and G28/G30 after homing. Check the probe corner and generator-plugin cut directions in ncSender. Verify the ATC pocket and TLS positions with Z raised (macros 9004, 9002, 9005).
