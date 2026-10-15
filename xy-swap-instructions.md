@@ -46,6 +46,10 @@ Nothing moves until step 5, so a mistake in steps 2-4 can't crash the machine.
 ## 2. Flash the firmware
 
 1. Load `STM32F4xx_LONGBOARD32_EXT_XY_swapped.json` in the web builder, build and flash.
+   - **Machine vendor profile warning:** if the builder has **Machine vendor: Sienci / Altmill MK2** selected, that profile turns on Y auto-square in addition to the file's X auto-square. The builder then reports **"MOTORS: available 5, required 6"**. Fix it by setting **Y-axis** to **Single motor** (X-axis stays **Auto-squared**). If the profile keeps forcing Y back, set Machine vendor to blank/none, pick the driver and board again, and click Load board.
+   - On the General tab, check: Number of axes **4**, X-axis **Auto-squared**, Y-axis **Single motor**, Z-axis **Single motor**, and no MOTORS warning.
+   - Before generating, click **Save board** and compare the exported file with `converted/STM32F4xx_LONGBOARD32_EXT_XY_swapped.json`. The only difference from the original should be `X_AUTO_SQUARE=1` replacing `Y_AUTO_SQUARE=1` (plus the changed defaults).
+   - The builder notes that updating from builds older than 20241208 resets settings. Check the build date in `$I` first. If it's older, expect a reset and use `full-settings-after-swap.txt`.
    - The only firmware change is `Y_AUTO_SQUARE=1` -> `X_AUTO_SQUARE=1`. grblHAL turns X ganging on automatically when X auto-square is set.
    - Checked against the grblHAL source (motor_pins.h): with 4 axes + 1 ganged there are 5 motors, and the ganged axis always takes the highest motor number (M4 = the board's Y2 connector). A stays on M3 (the A connector). This is the same arrangement Y2 uses today.
 2. After flashing, connect and send `$$`. **Compare it with your backup before doing anything else.**
