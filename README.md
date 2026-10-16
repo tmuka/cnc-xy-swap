@@ -4,7 +4,7 @@ Swapping the X and Y axes on a wall-mounted grblHAL machine, so that X is the du
 
 ## The machine
 
-This started as a **Onefinity X-50 Journeyman**. It was later upgraded with a **Sienci SuperLongBoard EXT** (grblHAL) controller and **Sienci AltMill** hybrid stepper motors (closed-loop, with integrated drivers) and limit switches. It's wall mounted, runs **ncSender Pro** on a Raspberry Pi 5, and has a Rapid Change ATC and a toolsetter.
+This started as a **[Onefinity](https://www.onefinitycnc.com) X-50 Journeyman**. It was later upgraded with a **[Sienci](https://sienci.com) [SuperLongBoard](https://sienci.com/product/slb) EXT** ([grblHAL](https://github.com/grblHAL)) controller and **Sienci AltMill** hybrid stepper motors (closed-loop, with integrated drivers) and limit switches. It's wall mounted, runs **[ncSender](https://ncsender.xyz) Pro** on a Raspberry Pi 5, and has a [Rapid Change ATC](https://docs.ncsender.xyz/plugins/rapid-change-atc/) and a toolsetter.
 
 **The settings, offsets, firmware and backups in this repo apply only to this machine.** Steps/mm, travel, directions, keep-out zones, ATC positions and work offsets all depend on its frame, motors, drivers and wiring. Don't flash the `.hex` or send the `$` settings to another machine as-is.
 
@@ -18,12 +18,12 @@ The process carries over to other machines more than the numbers do. If you're s
 
 Lessons that came up during the swap:
 - Confirm the new firmware actually took (`$I` build date and `$PINS`) before changing settings. The first flash attempt failed silently.
-- Flashing from ncSender on Linux/Raspberry Pi needs a udev rule for the STM32 DFU device (`0483:df11`), or the flash fails with "insufficient permissions":
+- [Flashing from ncSender](https://docs.ncsender.xyz/settings/firmware/) on Linux/Raspberry Pi needs a udev rule for the STM32 DFU device (`0483:df11`), or the flash fails with "insufficient permissions":
   ```
   SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0664", GROUP="plugdev", TAG+="uaccess"
   ```
   Save it as `/etc/udev/rules.d/50-stm32-dfu.rules`, then run `sudo udevadm control --reload-rules && sudo udevadm trigger`.
-- The firmware Sienci ATCi keep-out zone blocked the Rapid Change ATC from entering the rack, so it was turned off (`$683`). ncSender's own keep-out zone, which plugins can bypass, is the alternative.
+- The firmware Sienci ATCi keep-out zone blocked the Rapid Change ATC from entering the rack, so it was turned off (`$683`). [ncSender's own keep-out zone](https://docs.ncsender.xyz/features/keepout-zone/), which plugins can bypass, is the alternative.
 
 ## Files
 
