@@ -24,7 +24,7 @@ Context for a Claude Code session that continues this work. Start with `xy-swap-
 - The map's `#ifndef Y_GANGED` around M4_ENABLE: either way, the X2 enable ends up being PC7 = Y enable, so `$37=3` stands.
 - ncSender: `front-left` = xHome min / yHome min. The Rapid Change ATC plugin uses plain G53 X/Y moves, and orientation Y/Negative gives slot n = slot1.y - (n-1)*45.001.
 - The user's `$20=0` and `$21=0` (soft/hard limits off), with only jog limits (`$40=1`) on.
-- Added: a safer order (settings before rewire, no motion until switch tests), the EXT external-driver cable warning, `full-settings-after-swap.txt` in case flashing resets settings, `$#` capture, a warning about old jobs running rotated, and SD-card macro check.
+- Added: a safer order (settings before rewire, no motion until switch tests), the EXT cable-swap note (the AltMill motors have integrated drivers, so swap cables at the SLB-EXT only), `full-settings-after-swap.txt` in case flashing resets settings, `$#` capture, a warning about old jobs running rotated, and SD-card macro check.
 
 ## Status (2026-10-15)
 - Current firmware per `$I`: build 20260622, driver 260410, SuperLongBoard Ext, XYZA, plugins include SIENCI ATCi v0.5.0, FS macro plugin, SDCARD. The builder's <20241208 reset warning doesn't apply.

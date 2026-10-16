@@ -4,7 +4,7 @@ Swapping the X and Y axes on a wall-mounted grblHAL machine, so that X is the du
 
 ## The machine
 
-This started as a **Onefinity X-50 Journeyman**. It was later upgraded with a **Sienci SuperLongBoard EXT** (grblHAL) controller and **Sienci AltMill** stepper motors (with external drivers) and limit switches. It's wall mounted, runs **ncSender Pro** on a Raspberry Pi 5, and has a Rapid Change ATC and a toolsetter.
+This started as a **Onefinity X-50 Journeyman**. It was later upgraded with a **Sienci SuperLongBoard EXT** (grblHAL) controller and **Sienci AltMill** hybrid stepper motors (closed-loop, with integrated drivers) and limit switches. It's wall mounted, runs **ncSender Pro** on a Raspberry Pi 5, and has a Rapid Change ATC and a toolsetter.
 
 **The settings, offsets, firmware and backups in this repo apply only to this machine.** Steps/mm, travel, directions, keep-out zones, ATC positions and work offsets all depend on its frame, motors, drivers and wiring. Don't flash the `.hex` or send the `$` settings to another machine as-is.
 
@@ -12,7 +12,7 @@ This started as a **Onefinity X-50 Journeyman**. It was later upgraded with a **
 
 The process carries over to other machines more than the numbers do. If you're swapping or reassigning axes on a grblHAL board (especially a ganged/auto-squared axis), see:
 
-- [xy-swap-instructions.md](xy-swap-instructions.md): the full procedure. It covers the safe order (settings before rewiring, no motion until the switches are tested), rewiring an external-driver board, switch and jog tests, homing, and converting the sender config, macros and work offsets.
+- [xy-swap-instructions.md](xy-swap-instructions.md): the full procedure. It covers the safe order (settings before rewiring, no motion until the switches are tested), rewiring at the SLB-EXT, switch and jog tests, homing, and converting the sender config, macros and work offsets.
 - [CLAUDE.md](CLAUDE.md): the working notes from doing this with Claude Code. They cover what was checked against the grblHAL source (motor numbering for ganged axes, `$8`/`$3` interaction, the shared enable pin behind `$37`), web builder pitfalls (vendor profile duplicating defaults and dropping plugins), and problems hit along the way.
 - [converted/swap_ncs.py](converted/swap_ncs.py): an example of converting an ncSender backup to new axes (new X = -old Y, new Y = old X).
 

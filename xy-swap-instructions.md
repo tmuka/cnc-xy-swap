@@ -95,16 +95,16 @@ Send each line in the console, or paste `xy-swap-commands.txt`. Then send `$$` a
 
 | Item                          | Connect to             |
 |-------------------------------|------------------------|
-| Vertical motor's driver cable | **X** -> **Y** connector |
+| Vertical motor's signal cable | **X** -> **Y** connector |
 | Vertical limit switch         | **X** -> **Y** limit input |
-| Gantry motor 1's driver cable | **Y** -> **X** connector |
+| Gantry motor 1's signal cable | **Y** -> **X** connector |
 | Gantry limit switch 1         | **Y** -> **X** limit input |
 | Gantry motor 2                | Y2 connector, **unchanged** |
 | Gantry limit switch 2         | Y2 limit input, **unchanged** |
 
-**Important on the EXT board:** swap the **controller-to-driver signal cables** (step/dir/enable/alarm) at the SLB-EXT. Keep each motor wired to its own external driver. Each driver's microstep and current settings belong to its motor, and the very different steps/mm (200.4 vs 80.2) depend on them. Swapping motor wires at the driver outputs would put the wrong current and microstepping on each motor.
+**On the EXT board:** the AltMill motors are hybrid steppers with integrated drivers, so each cable from the SLB-EXT carries step/dir/enable/alarm straight to its motor. Swap the cables at the SLB-EXT connectors only. Each motor keeps its own driver settings (microstepping, which the very different steps/mm of 200.4 vs 80.2 depend on). If your machine uses separate external drivers instead, swap the controller-to-driver signal cables and keep each motor wired to its own driver.
 
-If the driver alarm/fault wires are separate from the motor cable, swap them along with the cables. They should follow their driver.
+If the alarm/fault wires are separate from the signal cable, swap them along with the cables. They should follow their motor.
 
 ## 5. First power-up and tests
 
