@@ -4,7 +4,7 @@ Swapping the X and Y axes on a wall-mounted grblHAL machine, so that X is the du
 
 ## The machine
 
-This started as a **[Onefinity](https://www.onefinitycnc.com) X-50 Journeyman**. It was later upgraded with a **[Sienci](https://sienci.com) [SuperLongBoard](https://sienci.com/product/slb) EXT** ([grblHAL](https://github.com/grblHAL)) controller and **Sienci AltMill** hybrid stepper motors (closed-loop, with integrated drivers) and limit switches. It's wall mounted, runs **[ncSender](https://ncsender.xyz) Pro** on a Raspberry Pi 5, and has a [Rapid Change ATC](https://rapidchangeatc.com/) and a toolsetter.
+This started as a **[Onefinity](https://www.onefinitycnc.com) X-50 Journeyman**. It was later upgraded with a **[Sienci](https://sienci.com) SLB-EXT** ([grblHAL](https://github.com/grblHAL)) controller and **Sienci AltMill** hybrid stepper motors (closed-loop, with integrated drivers) and limit switches. It's wall mounted, runs **[ncSender](https://ncsender.xyz) Pro** on a Raspberry Pi 5, and has a [Rapid Change ATC](https://rapidchangeatc.com/) and a toolsetter.
 
 **The settings, offsets, firmware and backups in this repo apply only to this machine.** Steps/mm, travel, directions, keep-out zones, ATC positions and work offsets all depend on its frame, motors, drivers and wiring. Don't flash the `.hex` or send the `$` settings to another machine as-is.
 
