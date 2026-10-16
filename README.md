@@ -1,6 +1,33 @@
 # CNC X/Y axis swap (SLB-EXT, wall mount)
 
-Start here: [xy-swap-instructions.md](xy-swap-instructions.md). It refers to files in `C:\downloads`. The same files are in this repo:
+Swapping the X and Y axes on a wall-mounted grblHAL machine, so that X is the dual-motor auto-squared gantry and Y is the vertical axis, with the home corner unchanged. Done and tested on 2026-10-15 (homing, jogging, ATC tool changes).
+
+## The machine
+
+This started as a **Onefinity X-50 Journeyman**. It was later upgraded with a **Sienci SuperLongBoard EXT** (grblHAL) controller and **Sienci AltMill** stepper motors (with external drivers) and limit switches. It's wall mounted, runs **ncSender Pro** on a Raspberry Pi 5, and has a Rapid Change ATC and a toolsetter.
+
+**The settings, offsets, firmware and backups in this repo apply only to this machine.** Steps/mm, travel, directions, keep-out zones, ATC positions and work offsets all depend on its frame, motors, drivers and wiring. Don't flash the `.hex` or send the `$` settings to another machine as-is.
+
+## What may help others
+
+The process carries over to other machines more than the numbers do. If you're swapping or reassigning axes on a grblHAL board (especially a ganged/auto-squared axis), see:
+
+- [xy-swap-instructions.md](xy-swap-instructions.md): the full procedure. It covers the safe order (settings before rewiring, no motion until the switches are tested), rewiring an external-driver board, switch and jog tests, homing, and converting the sender config, macros and work offsets.
+- [CLAUDE.md](CLAUDE.md): the working notes from doing this with Claude Code. They cover what was checked against the grblHAL source (motor numbering for ganged axes, `$8`/`$3` interaction, the shared enable pin behind `$37`), web builder pitfalls (vendor profile duplicating defaults and dropping plugins), and problems hit along the way.
+- [converted/swap_ncs.py](converted/swap_ncs.py): an example of converting an ncSender backup to new axes (new X = -old Y, new Y = old X).
+
+Lessons that came up during the swap:
+- Confirm the new firmware actually took (`$I` build date and `$PINS`) before changing settings. The first flash attempt failed silently.
+- Flashing from ncSender on Linux/Raspberry Pi needs a udev rule for the STM32 DFU device (`0483:df11`), or the flash fails with "insufficient permissions":
+  ```
+  SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0664", GROUP="plugdev", TAG+="uaccess"
+  ```
+  Save it as `/etc/udev/rules.d/50-stm32-dfu.rules`, then run `sudo udevadm control --reload-rules && sudo udevadm trigger`.
+- The firmware Sienci ATCi keep-out zone blocked the Rapid Change ATC from entering the rack, so it was turned off (`$683`). ncSender's own keep-out zone, which plugins can bypass, is the alternative.
+
+## Files
+
+The instructions refer to files in `C:\downloads`. The same files are in this repo:
 
 | File | Contents |
 |---|---|
